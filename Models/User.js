@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var userModelSchema = new Schema({
@@ -21,5 +21,5 @@ var userModelSchema = new Schema({
     }
 })
 
-const UserModel = mongoose.model('Todo',userModelSchema)
+const UserModel = mongoose.model('userModel',userModelSchema, 'Todo')
 module.exports = {UserModel}
