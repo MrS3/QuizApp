@@ -3,8 +3,8 @@ const express = require('express')
 const app = express()
 const {userModel} = require('./Models/User')
 
-mongoose.connect('mongodb://localhost/Todo', () => {
-    console.log
+mongoose.connect('mongodb://localhost/Todo', (error) => {
+    error ? console.log(error) : console.log('Conected to database')
 })
 
 app.listen(3000, () => {
