@@ -1,22 +1,12 @@
-var  express = require('express')
-var bodyParser = require('body-parser')
-var {mongose} = require('./mongoose')
-var {UserModel} = require('./Models/User')
-var {TodoModel} = require('./Models/Todo')
+let  express = require('express')
+let mongose = require('./mongoose')
+let apiController = require('./Controllers/apiController')
+let app = express()
+let port = process.env.PORT || 3000
 
-var app = express()
-app.use(bodyParser.json())
+mongose.databaseConnect()
+apiController(app)
 
-app.post('/todos', (request, response) => {
-    var todo = new TodoModel({
-        title: request.body.title
-    })
-    todo.save().then((doc) => {
-        response.send(doc)
-    }, (error) => {
-        console.log(error)
-    })
-})
-app.listen(3000, () => { 
+app.listen(port, () => { 
     console.log("Server started at port 3000")
 })
