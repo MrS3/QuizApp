@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/MrS3/NodeToDoApp/issues"
   },
-  "homepage": "https://github.com/MrS3/NodeToDoApp#readme"
+  "homepage": "https://github.com/MrS3/NodeToDoApp#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.11"
+  }
 }
