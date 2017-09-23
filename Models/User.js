@@ -17,7 +17,8 @@ var UserShema = new Schema({
         minlength: 1,
         unique: true,
         validate: {
-            validator: validator.isEmail
+            validator: validator.isEmail,
+            messaage: `{VALUE} is not a valid email`
         }
     },
     tokens: [{
