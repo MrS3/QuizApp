@@ -1,5 +1,7 @@
 const {Question} = require('../Models/Question')
+const {User} = require('../Models/User')
 const bodyParser = require('body-parser')
+const  _ = require('lodash');
 
 module.exports = (app) => {
     app.use(bodyParser.json())
@@ -10,6 +12,16 @@ module.exports = (app) => {
     //     })
     // })
     
+    app.post('/users', (response, request) => {
+        var body = _.pick(request.body,[name, email])
+        var user = new User(body)
+        user.save().then((user) => {
+            return user.generateAuthToken()
+        }).then((token) => {
+
+        })
+    })
+
     app.post('/questions', (request, response) => {
         var todo = new Question({
             message: request.body.message,
