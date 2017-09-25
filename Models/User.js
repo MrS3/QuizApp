@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
+const jwt = require('jsonwebtoken')
 
 const  Schema = mongoose.Schema
 
@@ -34,7 +35,13 @@ var UserShema = new Schema({
 })
 
 UserShema.methods.generateAuthToken = function() {
-
+    var user = this
+    var access = 'auth'
+    var token = jwt.sign({_id: user._id.toHexString()}, "malum").toString()
+    user.tokens.push({access, token})
+    return user.save().then(() => {
+        return token
+    })
 }
 
 const UserModel = mongoose.model('userModel',userModelSchema, 'Todo')
