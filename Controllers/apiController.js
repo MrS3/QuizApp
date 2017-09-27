@@ -1,11 +1,18 @@
 const {Question} = require('../Models/Question')
 const {User} = require('../Models/User')
 const bodyParser = require('body-parser')
+const {authenticate} = require('../Core/authenticate') 
 const  _ = require('lodash')
+
 
 module.exports = (app) => {
     app.use(bodyParser.json())
     
+    app.get('/test/user', authenticate, (request, response) => {
+        response.send(request.user)
+    })
+
+
     app.post('/user', (request, response) => {
         var body = _.pick(request.body,['name', 'email'])
         var user = new User(body)

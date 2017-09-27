@@ -42,28 +42,33 @@ UserShema.methods.toJSON = function() {
 UserShema.methods.generateAuthToken = function() {
     var user = this
     var access = 'auth'
-    var token = jwt.sign({_id: user._id.toHexString()}, "malum").toString()
+    var token = jwt.sign({_id: user._id.toHexString()}, 'malum').toString()
     user.tokens.push({access, token})
     return user.save().then(() => {
         return token
     })
 }
 
+
 UserShema.statics.findByToken = function(token) {
-    var user = this
-    var decoded;
+    var User = this
+    var access = 'auth'
+    var decoded
+
     try {
-        decoded = jwt.verify(token, "malum")
+        decoded = jwt.verify(token, 'malum')
     } catch (error) {
         return Promise.reject()
     }
 
-    User.findOne({
+    return User.findOne({
         '_id': decoded._id,
         'tokens.token': token,
-        'tokens.access': 'auth'
+        'tokens.access': access
     })
 }
+
+
 
 const User = mongoose.model('userModel',UserShema, 'Users')
 module.exports = {User}
