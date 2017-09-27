@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
+const _ = require('lodash')
 const  Schema = mongoose.Schema
 
 var UserShema = new Schema({
@@ -16,6 +17,7 @@ var UserShema = new Schema({
         minlength: 1,
         unique: true,
         validate: {
+            isAsync: true,
             validator: validator.isEmail,
             messaage: `{VALUE} is not a valid email`
         }
@@ -32,6 +34,11 @@ var UserShema = new Schema({
     }]
 })
 
+
+UserShema.methods.toJSON = function() {
+    return _.pick(this.toObject(), ['_id', 'email'])
+}
+
 UserShema.methods.generateAuthToken = function() {
     var user = this
     var access = 'auth'
@@ -42,5 +49,5 @@ UserShema.methods.generateAuthToken = function() {
     })
 }
 
-const User = mongoose.model('userModel',userModelSchema, 'Todo')
+const User = mongoose.model('userModel',UserShema, 'Users')
 module.exports = {User}

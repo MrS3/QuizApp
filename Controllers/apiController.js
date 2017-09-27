@@ -1,24 +1,20 @@
 const {Question} = require('../Models/Question')
 const {User} = require('../Models/User')
 const bodyParser = require('body-parser')
-const  _ = require('lodash');
+const  _ = require('lodash')
 
 module.exports = (app) => {
     app.use(bodyParser.json())
-    // app.use((error, request, response , next) => {
-    //     response.status(500).send({
-    //         status: error.status,
-    //         message: error.message
-    //     })
-    // })
     
-    app.post('/users', (response, request) => {
-        var body = _.pick(request.body,[name, email])
+    app.post('/user', (request, response) => {
+        var body = _.pick(request.body,['name', 'email'])
         var user = new User(body)
-        user.save().then((user) => {
+        user.save().then(() => {
             return user.generateAuthToken()
         }).then((token) => {
-
+            response.header('x-auth', token).send(user)
+        }).catch( (error) => {
+            response.status(400).send(error)
         })
     })
 
@@ -27,7 +23,6 @@ module.exports = (app) => {
             message: request.body.message,
             user: request.body.user
         })
-
         todo.save().then((doc) => {
             response.send(doc)
         }, (error) => {
