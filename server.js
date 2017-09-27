@@ -1,8 +1,8 @@
-let  express = require('express')
-let mongose = require('./mongoose')
-let apiController = require('./Controllers/apiController')
-let app = express()
-let port = process.env.PORT || 3000
+const  express = require('express')
+const  mongose = require('./Core/mongoose')
+const  apiController = require('./Controllers/apiController')
+const  app = express()
+const  port = process.env.PORT || 3000
 
 mongose.databaseConnect()
 apiController(app)
