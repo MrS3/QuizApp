@@ -49,5 +49,21 @@ UserShema.methods.generateAuthToken = function() {
     })
 }
 
+UserShema.statics.findByToken = function(token) {
+    var user = this
+    var decoded;
+    try {
+        decoded = jwt.verify(token, "malum")
+    } catch (error) {
+        return Promise.reject()
+    }
+
+    User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    })
+}
+
 const User = mongoose.model('userModel',UserShema, 'Users')
 module.exports = {User}
