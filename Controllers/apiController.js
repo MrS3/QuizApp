@@ -7,11 +7,6 @@ const  _ = require('lodash')
 
 module.exports = (app) => {
     app.use(bodyParser.json())
-    
-    app.get('/test/user', authenticate, (request, response) => {
-        response.send(request.user)
-    })
-
 
     app.post('/user', (request, response) => {
         var body = _.pick(request.body,['name', 'email'])
@@ -25,41 +20,28 @@ module.exports = (app) => {
         })
     })
 
-    app.post('/questions', (request, response) => {
-        var todo = new Question({
-            message: request.body.message,
-            user: request.body.user
-        })
-        todo.save().then((doc) => {
-            response.send(doc)
+    app.post('/questions', authenticate, (request, response) => {
+        if (request.user) {
+            var question = new Question({
+                userID: request.user._id,
+                message: request.body.message,
+                userName: request.user.name
+            })
+            question.save().then((doc) => {
+                response.status(200).send()
+            }, (error) => {
+                response.status(400).send({error})
+            })
+        } else {
+            response.send(request.user)
+        }
+    })
+
+    app.get('/questions', authenticate, (request, response) => {
+        Question.find({'userID': request.user._id}).then((questions) => {
+            response.send(questions)
         }, (error) => {
             response.status(400).send({error})
         })
-    })
-
-    app.get('/questions', (request, response) => {
-        Question.find().then((questions) => {
-            response.send({ questions })
-        }, (error) => {
-            response.status(400).send({error})
-        })
-    })
-
-    app.get('/questions/:user', (request, response) => {
-        Question.find({
-            user: request.params.user
-        }).then(( questions) => {
-            response.send({questions})
-        })
-        },(error) => {
-            response.status(400).send({error})
-    })
-
-    app.delete('/questions/:user', (request, response) => {
-        Question.remove({ user: request.params.user}).then((questions) => {
-            response.send({ questions})
-        }).catch( (error) => {
-            response.status(404).send()
-        })    
     })
 }
