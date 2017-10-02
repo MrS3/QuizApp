@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 const _ = require('lodash')
+
 const  Schema = mongoose.Schema
 
 var UserShema = new Schema({
@@ -33,7 +34,6 @@ var UserShema = new Schema({
         }
     }]
 })
-
 
 UserShema.methods.toJSON = function() {
     return _.pick(this.toObject(), ['_id', 'email'])
@@ -67,8 +67,6 @@ UserShema.statics.findByToken = function(token) {
         'tokens.access': access
     })
 }
-
-
 
 const User = mongoose.model('userModel',UserShema, 'Users')
 module.exports = {User}
