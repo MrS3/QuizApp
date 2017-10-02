@@ -10,3 +10,6 @@ apiController(app)
 app.listen(port, () => { 
     console.log("Server started at port 3000")
 })
+
+
+module.exports = { app }
