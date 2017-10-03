@@ -32,3 +32,11 @@ describe('POST /user', () => {
     })
 })
 
+describe('POST /questions', () => {
+    it('Should return 401 Unauthorized', (done) => {
+        var message = "This is test question"
+        request(app).post('/questions').send({message})
+        .expect(401, done)      
+    })
+})
+
