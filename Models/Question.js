@@ -3,7 +3,10 @@ const Shema = mongoose.Schema
 const _ = require('lodash')
 
 var QuestionShema = new Shema({
-    userID: String,
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     userName: String,
     message: {
         type: String,
