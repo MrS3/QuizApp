@@ -19,11 +19,10 @@ module.exports = (app) => {
             response.status(400).send(error)
         })
     })
-
     app.post('/questions', authenticate, (request, response) => {
         if (request.user) {
             var question = new Question({
-                userID: request.user._id,
+                _creator: request.user._id,
                 message: request.body.message,
                 userName: request.user.name
             })
@@ -38,7 +37,7 @@ module.exports = (app) => {
     })
 
     app.get('/questions', authenticate, (request, response) => {
-        Question.find({'userID': request.user._id}).then((questions) => {
+        Question.find({_creator: request.user._id}).then((questions) => {
             response.send(questions)
         }, (error) => {
             response.status(400).send({error})
