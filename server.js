@@ -1,3 +1,4 @@
+require('./Config/config')
 const  express = require('express')
 const  mongose = require('./Core/mongoose')
 const  apiController = require('./Controllers/apiController')
