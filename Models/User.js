@@ -42,7 +42,7 @@ UserShema.methods.toJSON = function() {
 UserShema.methods.generateAuthToken = function() {
     var user = this
     var access = 'auth'
-    var token = jwt.sign({_id: user._id.toHexString()}, 'malum').toString()
+    var token = jwt.sign({_id: user._id.toHexString()}, process.env.JWT_SECRET).toString()
     user.tokens.push({access, token})
     return user.save().then(() => {
         return token
@@ -56,7 +56,7 @@ UserShema.statics.findByToken = function(token) {
     var decoded
 
     try {
-        decoded = jwt.verify(token, 'malum')
+        decoded = jwt.verify(token, process.env.JWT_SECRET)
     } catch (error) {
         return Promise.reject()
     }
